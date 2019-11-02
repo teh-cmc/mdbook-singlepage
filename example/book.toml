@@ -1,0 +1,8 @@
+[book]
+authors = ["Clement Rey"]
+language = "en"
+multilingual = false
+src = "src"
+title = "My example book"
+
+[output.singlepage]

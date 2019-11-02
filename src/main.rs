@@ -25,15 +25,17 @@ fn main() {
             BookItem::Chapter(ch) if ch.number.is_none() => None,
             BookItem::Chapter(ch) => {
                 let number = ch.number.as_ref().unwrap();
-                let indent = number.len() - 1;
-                let offset = "    ".repeat(indent);
-                if indent > 0 {
-                    let anchor = title_to_anchor(&format!("{} {}", number, ch.name));
-                    format!("{}{} [{}](#{})  \n", offset, number, ch.name, anchor).into()
-                } else {
-                    let name = &ch.name[number.to_string().len()..];
+                let lvl = number.len();
+                let offset = "    ".repeat(lvl - 1);
+                if lvl == 1 {
+                    // chapter
+                    let name = &ch.name[number.to_string().len() + 1..];
                     let anchor = title_to_anchor(&ch.name);
                     format!("{}{} [{}](#{})  \n", offset, number, name, anchor).into()
+                } else {
+                    // section
+                    let anchor = title_to_anchor(&format!("{} {}", number, ch.name));
+                    format!("{}{} [{}](#{})  \n", offset, number, ch.name, anchor).into()
                 }
             }
             _ => None,
@@ -48,11 +50,15 @@ fn main() {
             }
             _ => None,
         })
-        .for_each(|(lvl, intro)| {
+        .for_each(|(lvl, content)| {
             if lvl == 1 {
+                // chapter
                 writeln!(f, "\n---\n").unwrap();
+            } else {
+                // section
+                writeln!(f).unwrap();
             }
-            f.write_all(intro.as_bytes()).unwrap();
+            f.write_all(content.as_bytes()).unwrap();
         });
 }
 
