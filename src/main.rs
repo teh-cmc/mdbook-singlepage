@@ -17,7 +17,7 @@ fn main() {
         .take(1)
         .for_each(|intro| f.write_fmt(format_args!("{}", intro)).unwrap());
 
-    writeln!(f, "\n---\n").unwrap();
+    writeln!(f, "\n***\n").unwrap();
 
     ctx.book // index
         .iter()
@@ -53,7 +53,7 @@ fn main() {
         .for_each(|(lvl, content)| {
             if lvl == 1 {
                 // chapter
-                writeln!(f, "\n---\n").unwrap();
+                writeln!(f, "\n***\n").unwrap();
             } else {
                 // section
                 writeln!(f).unwrap();
